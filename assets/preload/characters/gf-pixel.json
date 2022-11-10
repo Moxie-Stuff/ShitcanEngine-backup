@@ -1,74 +1,39 @@
 {
 	"animations": [
 		{
-			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
+			"loop": false,
+			"fps": 8,
 			"anim": "danceLeft",
-			"fps": 24,
-			"name": "GF IDLE",
 			"indices": [
-				30,
-				0,
-				1,
 				2,
 				3,
-				4,
-				5,
+				4
+			],
+			"name": "Pixel gf dance0"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 8,
+			"anim": "danceRight",
+			"indices": [
 				6,
 				7,
 				8,
-				9,
-				10,
-				11,
-				12,
-				13,
-				14
-			]
-		},
-		{
-			"loop": false,
-			"offsets": [
-				0,
 				0
 			],
-			"anim": "danceRight",
-			"fps": 24,
-			"name": "GF IDLE",
-			"indices": [
-				15,
-				16,
-				17,
-				18,
-				19,
-				20,
-				21,
-				22,
-				23,
-				24,
-				25,
-				26,
-				27,
-				28,
-				29
-			]
-		},
-		{
-			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"anim": "singUP",
-			"fps": 24,
-			"name": "GF IDLE",
-			"indices": []
+			"name": "Pixel gf dance0"
 		}
 	],
 	"no_antialiasing": true,
-	"image": "characters/gfPixel",
+	"image": "characters/Pixel_gf",
 	"position": [
 		0,
 		0
@@ -85,5 +50,5 @@
 		80
 	],
 	"sing_duration": 4,
-	"scale": 5.99999999999999
+	"scale": 8
 }

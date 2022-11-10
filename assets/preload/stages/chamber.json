@@ -1,0 +1,26 @@
+{
+	"directory": "exe",
+	"defaultZoom": 0.7,
+	"isPixelStage": false,
+
+	"boyfriend": [2040, 335],
+	"girlfriend": [400, 130],
+	"opponent": [1, -244],
+
+	"hide_girlfriend":true,
+	"camera_boyfriend": [-150, -50],
+	"camera_opponent": [0, 0],
+	"camera_girlfriend": [0, 0],
+	"camera_speed": 1.75,
+	"preloadStrings": [
+		"Chamber/Emeralds",
+		"Chamber/FleetwayBGshit",
+		"Chamber/Floor",
+		"Chamber/pebles",
+		"Chamber/Porker Lewis",
+		"Chamber/The Chamber",
+		"Chamber/Wall",
+		"Chamber/Emerald Beam",
+		"Chamber/Emerald Beam Charged"
+	]
+}

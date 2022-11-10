@@ -72,6 +72,7 @@ class Paths
 				var obj = currentTrackedAssets.get(key);
 				@:privateAccess
 				if (obj != null) {
+					trace("killing " + key);
 					openfl.Assets.cache.removeBitmapData(key);
 					FlxG.bitmap._cache.remove(key);
 					obj.destroy();
@@ -232,6 +233,20 @@ class Paths
 		return inst;
 	}
 
+	inline static public function voicesAlt(song:String):Any
+	{
+		var songKey:String = '${formatToSongPath(song)}/VoicesAlt';
+		var voices = returnSound('songs', songKey);
+		return voices;
+	}
+
+	inline static public function instAlt(song:String):Any
+	{
+		var songKey:String = '${formatToSongPath(song)}/InstAlt';
+		var inst = returnSound('songs', songKey);
+		return inst;
+	}
+
 	inline static public function image(key:String, ?library:String):FlxGraphic
 	{
 		// streamlined the assets process more
@@ -324,27 +339,25 @@ class Paths
 	}
 
 	inline static public function formatToSongPath(path:String) {
-		var invalidChars = ~/[~&\\;:<>#]/;
-		var hideChars = ~/[.,'"%?!]/;
-
-		var path = invalidChars.split(path.replace(' ', '-')).join("-");
-		return hideChars.split(path).join("").toLowerCase();
+		return path.toLowerCase().replace(' ', '-');
 	}
 
 	// completely rewritten asset loading? fuck!
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	public static function returnGraphic(key:String, ?library:String) {
+	public static function returnGraphic(key:String, ?library:String, ?ignoreMods:Bool = false) {
 		#if MODS_ALLOWED
-		var modKey:String = modsImages(key);
-		if(FileSystem.exists(modKey)) {
-			if(!currentTrackedAssets.exists(modKey)) {
-				var newBitmap:BitmapData = BitmapData.fromFile(modKey);
-				var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(newBitmap, false, modKey);
-				newGraphic.persist = true;
-				currentTrackedAssets.set(modKey, newGraphic);
+		if(!ignoreMods){
+			var modKey:String = modsImages(key);
+			if(FileSystem.exists(modKey)) {
+				if(!currentTrackedAssets.exists(modKey)) {
+					var newBitmap:BitmapData = BitmapData.fromFile(modKey);
+					var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(newBitmap, false, modKey);
+					newGraphic.persist = true;
+					currentTrackedAssets.set(modKey, newGraphic);
+				}
+				localTrackedAssets.push(modKey);
+				return currentTrackedAssets.get(modKey);
 			}
-			localTrackedAssets.push(modKey);
-			return currentTrackedAssets.get(modKey);
 		}
 		#end
 
@@ -355,24 +368,30 @@ class Paths
 				var newGraphic:FlxGraphic = FlxG.bitmap.add(path, false, path);
 				newGraphic.persist = true;
 				currentTrackedAssets.set(path, newGraphic);
+				#if traceLoading
+				trace(path, newGraphic);
+				#end
 			}
 			localTrackedAssets.push(path);
 			return currentTrackedAssets.get(path);
 		}
+		trace(path);
 		trace('oh no its returning null NOOOO');
 		return null;
 	}
 
 	public static var currentTrackedSounds:Map<String, Sound> = [];
-	public static function returnSound(path:String, key:String, ?library:String) {
+	public static function returnSound(path:String, key:String, ?library:String, ?ignoreMods:Bool = false) {
 		#if MODS_ALLOWED
-		var file:String = modsSounds(path, key);
-		if(FileSystem.exists(file)) {
-			if(!currentTrackedSounds.exists(file)) {
-				currentTrackedSounds.set(file, Sound.fromFile(file));
+		if(!ignoreMods){
+			var file:String = modsSounds(path, key);
+			if(FileSystem.exists(file)) {
+				if(!currentTrackedSounds.exists(file)) {
+					currentTrackedSounds.set(file, Sound.fromFile(file));
+				}
+				localTrackedAssets.push(key);
+				return currentTrackedSounds.get(file);
 			}
-			localTrackedAssets.push(key);
-			return currentTrackedSounds.get(file);
 		}
 		#end
 		// I hate this so god damn much
@@ -463,13 +482,11 @@ class Paths
 	static public function getGlobalMods()
 		return globalMods;
 
-	static public function pushGlobalMods() // prob a better way to do this but idc
-	{
+	static public function pushGlobalMods(){ // prob a better way to do this but idc
 		globalMods = [];
-		var path:String = 'modsList.txt';
-		if(FileSystem.exists(path))
+		if (FileSystem.exists("modsList.txt"))
 		{
-			var list:Array<String> = CoolUtil.coolTextFile(path);
+			var list:Array<String> = CoolUtil.listFromString(File.getContent("modsList.txt"));
 			for (i in list)
 			{
 				var dat = i.split("|");
@@ -485,7 +502,7 @@ class Paths
 								var global:Bool = Reflect.getProperty(stuff, "runsGlobally");
 								if(global)globalMods.push(dat[0]);
 							}
-						} catch(e:Dynamic){
+						}catch(e:Dynamic){
 							trace(e);
 						}
 					}

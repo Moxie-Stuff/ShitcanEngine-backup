@@ -50,11 +50,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		if(title == null) title = 'Options';
 		if(rpcTitle == null) rpcTitle = 'Options Menu';
-		
+
 		#if desktop
 		DiscordClient.changePresence(rpcTitle, null);
 		#end
-		
+
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.screenCenter();
@@ -75,9 +75,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		descBox.alpha = 0.6;
 		add(descBox);
 
-		var titleText:Alphabet = new Alphabet(75, 40, title, true);
-		titleText.scaleX = 0.6;
-		titleText.scaleY = 0.6;
+		var titleText:Alphabet = new Alphabet(0, 0, title, true, false, 0, 0.6);
+		titleText.x += 60;
+		titleText.y += 40;
 		titleText.alpha = 0.4;
 		add(titleText);
 
@@ -89,10 +89,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		for (i in 0...optionsArray.length)
 		{
-			var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
+			var optionText:Alphabet = new Alphabet(0, 70 * i, optionsArray[i].name, false, false);
 			optionText.isMenuItem = true;
+			optionText.x += 300;
 			/*optionText.forceX = 300;
 			optionText.yMult = 90;*/
+			optionText.xAdd = 200;
 			optionText.targetY = i;
 			grpOptions.add(optionText);
 
@@ -101,10 +103,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				checkbox.sprTracker = optionText;
 				checkbox.ID = i;
 				checkboxGroup.add(checkbox);
-			} else {
+			} else if(optionsArray[i].type != 'button' && optionsArray[i].type != 'label') {
 				optionText.x -= 80;
-				optionText.startPosition.x -= 80;
-				//optionText.xAdd -= 80;
+				optionText.xAdd -= 80;
 				var valueText:AttachedText = new AttachedText('' + optionsArray[i].getValue(), optionText.width + 80);
 				valueText.sprTracker = optionText;
 				valueText.copyAlpha = true;
@@ -112,7 +113,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				grpTexts.add(valueText);
 				optionsArray[i].setChild(valueText);
 			}
-			//optionText.snapToPosition(); //Don't ignore me when i ask for not making a fucking pull request to uncomment this line ok
 
 			if(optionsArray[i].showBoyfriend && boyfriend == null)
 			{
@@ -166,7 +166,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					curOption.change();
 					reloadCheckboxes();
 				}
-			} else {
+			}else if(curOption.type == 'button'){
+				if(controls.ACCEPT)
+					curOption.callback();
+			} else if(curOption.type != 'label') {
 				if(controls.UI_LEFT || controls.UI_RIGHT) {
 					var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P);
 					if(holdTime > 0.5 || pressed) {
@@ -221,7 +224,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							{
 								case 'int':
 									curOption.setValue(Math.round(holdValue));
-								
+
 								case 'float' | 'percent':
 									curOption.setValue(FlxMath.roundDecimal(holdValue, curOption.decimals));
 							}
@@ -242,17 +245,20 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			{
 				for (i in 0...optionsArray.length)
 				{
+
 					var leOption:Option = optionsArray[i];
-					leOption.setValue(leOption.defaultValue);
-					if(leOption.type != 'bool')
-					{
-						if(leOption.type == 'string')
+					if(leOption.type!='button' && leOption.type != 'label'){
+						leOption.setValue(leOption.defaultValue);
+						if(leOption.type != 'bool')
 						{
-							leOption.curOption = leOption.options.indexOf(leOption.getValue());
+							if(leOption.type == 'string')
+							{
+								leOption.curOption = leOption.options.indexOf(leOption.getValue());
+							}
+							updateTextFrom(leOption);
 						}
-						updateTextFrom(leOption);
+						leOption.change();
 					}
-					leOption.change();
 				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				reloadCheckboxes();
@@ -284,7 +290,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 		holdTime = 0;
 	}
-	
+
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;

@@ -1,0 +1,15 @@
+{
+	"directory": "exe",
+	"defaultZoom": 0.75,
+	"isPixelStage": false,
+
+	"boyfriend": [300, 100],
+	"girlfriend": [400, 130],
+	"opponent": [1200, -200],
+	"hide_girlfriend": true,
+
+	"camera_boyfriend": [150, -75],
+	"camera_opponent": [0, 0],
+	"camera_girlfriend": [0, 0],
+	"camera_speed": 1.5
+}

@@ -1,0 +1,10 @@
+function preReceptorGeneration(){
+  if( ClientPrefs.middleScroll){
+    getInstance().playerStrums.baseX = (FlxG.width / 2);
+    getInstance().opponentStrums.baseX = (FlxG.width / 2);
+  }else{
+    getInstance().playerStrums.baseX = (FlxG.width/2 - (FlxG.width/4));
+    getInstance().opponentStrums.baseX = (FlxG.width / 2 + (FlxG.width / 4));
+  }
+
+}

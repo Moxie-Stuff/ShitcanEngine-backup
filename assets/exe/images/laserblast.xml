@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="laserblast.png">
+	<!-- Created with Adobe Animate version 21.0.5.40714 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="laser instance 10000" x="2" y="2" width="388" height="390" frameX="-246" frameY="-247" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10001" x="392" y="2" width="543" height="546" frameX="-171" frameY="-171" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10002" x="937" y="2" width="681" height="672" frameX="-109" frameY="-110" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10003" x="1620" y="2" width="1659" height="957" frameX="-62" frameY="-62" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10004" x="2" y="961" width="1705" height="982" frameX="-28" frameY="-28" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10005" x="1709" y="961" width="1729" height="999" frameX="-7" frameY="-7" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10006" x="2" y="1962" width="1723" height="1007" frameX="0" frameY="0" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10007" x="1727" y="1962" width="0" height="0" frameX="-591" frameY="1412" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10008" x="1729" y="1962" width="1261" height="602" frameX="-467" frameY="-432" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10009" x="1727" y="1962" width="0" height="0" frameX="-591" frameY="1412" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10010" x="2" y="2971" width="1153" height="553" frameX="-458" frameY="-431" frameWidth="1736" frameHeight="1034"/>
+	<SubTexture name="laser instance 10011" x="1727" y="1962" width="0" height="0" frameX="-591" frameY="1412" frameWidth="1736" frameHeight="1034"/>
+</TextureAtlas>

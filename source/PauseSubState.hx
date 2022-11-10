@@ -36,21 +36,26 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
+		var cam:FlxCamera = FlxG.cameras.list[FlxG.cameras.list.length - 1];
 		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
-		if(PlayState.chartingMode)
+		if(PlayState.chartingMode #if debug || true #end)
 		{
-			menuItemsOG.insert(2, 'Leave Charting Mode');
-			
+			var shit:Int = 2;
+			if (PlayState.chartingMode){
+				menuItemsOG.insert(shit, 'Leave Charting Mode');
+				shit++;
+			}
+
 			var num:Int = 0;
 			if(!PlayState.instance.startingSong)
 			{
 				num = 1;
-				menuItemsOG.insert(3, 'Skip Time');
+				menuItemsOG.insert(shit, 'Skip Time');
 			}
-			menuItemsOG.insert(3 + num, 'End Song');
-			menuItemsOG.insert(4 + num, 'Toggle Practice Mode');
-			menuItemsOG.insert(5 + num, 'Toggle Botplay');
+			menuItemsOG.insert(shit + num, 'End Song');
+			menuItemsOG.insert(shit + num, 'Toggle Practice Mode');
+			menuItemsOG.insert(shit + num, 'Toggle Botplay');
 		}
 		menuItems = menuItemsOG;
 
@@ -72,8 +77,9 @@ class PauseSubState extends MusicBeatSubstate
 
 		FlxG.sound.list.add(pauseMusic);
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		var bg:FlxSprite = new FlxSprite().makeGraphic(cam.width, cam.height, FlxColor.BLACK);
 		bg.alpha = 0;
+		bg.screenCenter(XY);
 		bg.scrollFactor.set();
 		add(bg);
 
@@ -101,7 +107,7 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
 		practiceText.scrollFactor.set();
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
-		practiceText.x = FlxG.width - (practiceText.width + 20);
+		practiceText.x = cam.width - (practiceText.width + 20);
 		practiceText.updateHitbox();
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
@@ -109,8 +115,8 @@ class PauseSubState extends MusicBeatSubstate
 		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
 		chartingText.scrollFactor.set();
 		chartingText.setFormat(Paths.font('vcr.ttf'), 32);
-		chartingText.x = FlxG.width - (chartingText.width + 20);
-		chartingText.y = FlxG.height - (chartingText.height + 20);
+		chartingText.x = cam.width - (chartingText.width + 20);
+		chartingText.y = cam.height - (chartingText.height + 20);
 		chartingText.updateHitbox();
 		chartingText.visible = PlayState.chartingMode;
 		add(chartingText);
@@ -119,9 +125,9 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 
-		levelInfo.x = FlxG.width - (levelInfo.width + 20);
-		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
-		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
+		levelInfo.x = cam.width - (levelInfo.width + 20);
+		levelDifficulty.x = cam.width - (levelDifficulty.width + 20);
+		blueballedTxt.x = cam.width - (blueballedTxt.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
@@ -132,14 +138,12 @@ class PauseSubState extends MusicBeatSubstate
 		add(grpMenuShit);
 
 		regenMenu();
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		cameras = [cam];
 	}
 
 	var holdTime:Float = 0;
-	var cantUnpause:Float = 0.1;
 	override function update(elapsed:Float)
 	{
-		cantUnpause -= elapsed;
 		if (pauseMusic.volume < 0.5)
 			pauseMusic.volume += 0.01 * elapsed;
 
@@ -190,7 +194,7 @@ class PauseSubState extends MusicBeatSubstate
 				}
 		}
 
-		if (accepted && (cantUnpause <= 0 || !ClientPrefs.controllerMode))
+		if (accepted)
 		{
 			if (menuItems == difficultyChoices)
 			{
@@ -203,6 +207,15 @@ class PauseSubState extends MusicBeatSubstate
 					FlxG.sound.music.volume = 0;
 					PlayState.changedDifficulty = true;
 					PlayState.chartingMode = false;
+					skipTimeTracker = null;
+
+					if(skipTimeText != null)
+					{
+						skipTimeText.kill();
+						remove(skipTimeText);
+						skipTimeText.destroy();
+					}
+					skipTimeText = null;
 					return;
 				}
 
@@ -216,15 +229,16 @@ class PauseSubState extends MusicBeatSubstate
 					close();
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
-					deleteSkipTimeText();
 					regenMenu();
 				case 'Toggle Practice Mode':
 					PlayState.instance.practiceMode = !PlayState.instance.practiceMode;
 					PlayState.changedDifficulty = true;
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song":
+
 					restartSong();
 				case "Leave Charting Mode":
+
 					restartSong();
 					PlayState.chartingMode = false;
 				case 'Skip Time':
@@ -243,6 +257,7 @@ class PauseSubState extends MusicBeatSubstate
 						close();
 					}
 				case "End Song":
+
 					close();
 					PlayState.instance.finishSong(true);
 				case 'Toggle Botplay':
@@ -252,10 +267,9 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
 				case "Exit to menu":
+
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
-
-					WeekData.loadTheFirstEnabledMod();
 					if(PlayState.isStoryMode) {
 						MusicBeatState.switchState(new StoryMenuState());
 					} else {
@@ -267,18 +281,6 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.chartingMode = false;
 			}
 		}
-	}
-
-	function deleteSkipTimeText()
-	{
-		if(skipTimeText != null)
-		{
-			skipTimeText.kill();
-			remove(skipTimeText);
-			skipTimeText.destroy();
-		}
-		skipTimeText = null;
-		skipTimeTracker = null;
 	}
 
 	public static function restartSong(noTrans:Bool = false)
@@ -349,7 +351,7 @@ class PauseSubState extends MusicBeatSubstate
 		}
 
 		for (i in 0...menuItems.length) {
-			var item = new Alphabet(90, 320, menuItems[i], true);
+			var item = new Alphabet(0, 70 * i + 30, menuItems[i], true, false);
 			item.isMenuItem = true;
 			item.targetY = i;
 			grpMenuShit.add(item);
@@ -370,7 +372,7 @@ class PauseSubState extends MusicBeatSubstate
 		curSelected = 0;
 		changeSelection();
 	}
-	
+
 	function updateSkipTextStuff()
 	{
 		if(skipTimeText == null || skipTimeTracker == null) return;

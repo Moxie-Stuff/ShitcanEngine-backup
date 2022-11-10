@@ -17,6 +17,10 @@ typedef BPMChangeEvent =
 
 class Conductor
 {
+	public static var ROWS_PER_BEAT:Int = 48;
+	// its 48 in ITG but idk because FNF doesnt work w/ note rows
+	public static var ROWS_PER_MEASURE:Int = ROWS_PER_BEAT*4;
+
 	public static var bpm:Float = 100;
 	public static var crochet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrochet:Float = crochet / 4; // steps in milliseconds
@@ -44,6 +48,24 @@ class Conductor
 			}
 		}
 		return data[data.length - 1];
+	}
+
+	inline public static function beatToNoteRow(beat:Float):Int{
+		return Math.round(beat*Conductor.ROWS_PER_BEAT);
+	}
+
+	inline public static function noteRowToBeat(row:Float):Float{
+		return row/Conductor.ROWS_PER_BEAT;
+	}
+
+	public static function timeSinceLastBPMChange(time:Float):Float{
+		var lastChange = getBPMFromSeconds(time);
+		return time-lastChange.songTime;
+	}
+
+	public static function getBeatInMeasure(time:Float):Float{
+		var lastBPMChange = getBPMFromSeconds(time);
+		return (time-lastBPMChange.songTime) / (lastBPMChange.stepCrochet*4);
 	}
 
 	public static function getCrotchetAtTime(time:Float){
@@ -128,18 +150,11 @@ class Conductor
 				bpmChangeMap.push(event);
 			}
 
-			var deltaSteps:Int = Math.round(getSectionBeats(song, i) * 4);
+			var deltaSteps:Int = song.notes[i].lengthInSteps;
 			totalSteps += deltaSteps;
 			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
 		}
 		trace("new BPM map BUDDY " + bpmChangeMap);
-	}
-
-	static function getSectionBeats(song:SwagSong, section:Int)
-	{
-		var val:Null<Float> = null;
-		if(song.notes[section] != null) val = song.notes[section].sectionBeats;
-		return val != null ? val : 4;
 	}
 
 	inline public static function calculateCrochet(bpm:Float){

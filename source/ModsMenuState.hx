@@ -329,10 +329,9 @@ class ModsMenuState extends MusicBeatState
 			var newMod:ModMetadata = new ModMetadata(values[0]);
 			mods.push(newMod);
 
-			newMod.alphabet = new Alphabet(0, 0, mods[i].name, true);
+			newMod.alphabet = new Alphabet(0, 0, mods[i].name, true, false, 0.05);
 			var scale:Float = Math.min(840 / newMod.alphabet.width, 1);
-			newMod.alphabet.scaleX = scale;
-			newMod.alphabet.scaleY = scale;
+			newMod.alphabet = new Alphabet(0, 0, mods[i].name, true, false, 0.05, scale);
 			newMod.alphabet.y = i * 150;
 			newMod.alphabet.x = 310;
 			add(newMod.alphabet);
@@ -486,11 +485,6 @@ class ModsMenuState extends MusicBeatState
 				TitleState.initialized = false;
 				TitleState.closedState = false;
 				FlxG.sound.music.fadeOut(0.3);
-				if(FreeplayState.vocals != null)
-				{
-					FreeplayState.vocals.fadeOut(0.3);
-					FreeplayState.vocals = null;
-				}
 				FlxG.camera.fade(FlxColor.BLACK, 0.5, false, FlxG.resetGame, false);
 			}
 			else
@@ -523,16 +517,27 @@ class ModsMenuState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		var noMods:Bool = (mods.length < 1);
+		if(mods.length < 1)
+		{
+			for (obj in visibleWhenHasMods)
+			{
+				obj.visible = false;
+			}
+			for (obj in visibleWhenNoMods)
+			{
+				obj.visible = true;
+			}
+			return;
+		}
+
 		for (obj in visibleWhenHasMods)
 		{
-			obj.visible = !noMods;
+			obj.visible = true;
 		}
 		for (obj in visibleWhenNoMods)
 		{
-			obj.visible = noMods;
+			obj.visible = false;
 		}
-		if(noMods) return;
 
 		curSelected += change;
 		if(curSelected < 0)
@@ -745,14 +750,6 @@ class ModMetadata
 				if(description != null && description.length > 0)
 				{
 					this.description = description;
-				}
-				if(name == 'Name')
-				{
-					this.name = folder;
-				}
-				if(description == 'Description')
-				{
-					this.description = "No description provided.";
 				}
 				if(colors != null && colors.length > 2)
 				{
