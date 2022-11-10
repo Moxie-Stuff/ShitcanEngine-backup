@@ -46,6 +46,20 @@ class QuantNotesSubState extends MusicBeatSubstate
 
 	var posX = 230;
 
+	public static var defaults:Array<Array<Int>> = [
+		[0, -20, 0], // 4th
+		[-130, -20, 0], // 8th
+		[-80, -20, 0], // 12th
+		[128, -30, 0], // 16th
+		[-120, -70, -35], // 20th
+		[-80, -20, 0], // 24th
+		[50, -20, 0], // 32nd
+		[-80, -20, 0], // 48th
+		[160, -15, 0], // 64th
+		[-120, -70, -35], // 96th
+		[-120, -70, -35] // 192nd
+	];
+
 	public static var quantizations:Array<String> = [
 		"4th",
 		"8th",
@@ -286,11 +300,14 @@ class QuantNotesSubState extends MusicBeatSubstate
 
 	function resetValue(selected:Int, type:Int) {
 		curValue = 0;
-		ClientPrefs.quantHSV[selected][type] = 0;
+		ClientPrefs.quantHSV[selected][type] = defaults[selected][type];
 		switch(type) {
-			case 0: shaderArray[selected].hue = 0;
-			case 1: shaderArray[selected].saturation = 0;
-			case 2: shaderArray[selected].lightness = 0;
+			case 0:
+				shaderArray[selected].hue = defaults[selected][type];
+			case 1:
+				shaderArray[selected].saturation = defaults[selected][type];
+			case 2:
+				shaderArray[selected].lightness = defaults[selected][type];
 		}
 
 		var item = grpNumbers.members[(selected * 3) + type];

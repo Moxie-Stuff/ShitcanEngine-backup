@@ -2,6 +2,6 @@
 	"name": "Name",
 	"description": "Description",
 	"restart":false,
-	"color": [170, 0, 255],
-	"scriptVer": 1
+	"runGlobally": false,
+	"color": [170, 0, 255]
 }

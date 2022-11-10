@@ -102,6 +102,8 @@ class FunkinScript {
 		set('curDecBeat', 0);
 		set('curDecStep', 0);
 		set('version', MainMenuState.psychEngineVersion.trim());
+
+		PlayState.instance.callOnScripts('onCreate', []);
 	}
 }
 

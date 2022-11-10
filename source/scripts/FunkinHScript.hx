@@ -154,6 +154,15 @@ class FunkinHScript extends FunkinScript
 		set("FunkinHScript", FunkinHScript);
 		set("GameOverSubstate", GameOverSubstate);
 		set("HealthIcon", HealthIcon);
+		
+		//adding functions
+		set("add", function(obj:Dynamic){
+			return PlayState.instance.addBehindGF(obj);
+		});
+		set("addAbove", function(obj:Dynamic){
+			return FlxG.state.add(obj);
+		});
+			
 		var currentState = flixel.FlxG.state;
 		if ((currentState is PlayState)){
 			var state:PlayState = cast currentState;

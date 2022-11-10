@@ -3,28 +3,15 @@
 	"tasks": [
 		{
 			"type": "lime",
-			"command": "build",
-			"targetConfiguration": "Windows / Debug",
-			"problemMatcher": [
-				"$haxe-absolute",
-				"$haxe",
-				"$haxe-error",
-				"$haxe-trace"
-			],
-			"label": "lime: build windows -debug",
-			"group": "build"
-		},
-		{
-			"type": "lime",
 			"command": "test",
-			"targetConfiguration": "Windows / Debug",
+			"targetConfiguration": "Windows",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
 				"$haxe-error",
 				"$haxe-trace"
 			],
-			"label": "lime: test windows -debug",
+			"label": "lime: test windows",
 			"group": {
 				"kind": "build",
 				"isDefault": true

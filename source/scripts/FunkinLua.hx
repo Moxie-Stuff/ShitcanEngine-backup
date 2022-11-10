@@ -40,6 +40,8 @@ import Type.ValueType;
 import Controls;
 import DialogueBoxPsych;
 import scripts.Globals.*;
+import scripts.FunkinScript;
+import scripts.*;
 #if desktop
 import Discord;
 #end
@@ -2173,6 +2175,7 @@ class FunkinLua extends FunkinScript
 		});
 
 		call('onCreate', []);
+		// PlayState.instance.callOnScripts('onCreate', []);
 		#end
 	}
 

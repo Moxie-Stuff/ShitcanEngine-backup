@@ -65,14 +65,9 @@ class ChartingState extends MusicBeatState
 		'',
 		'Alt Animation',
 		'Hey!',
-		'Static Note',
-		'Phantom Note',
 		'Hurt Note',
-		'Pixel Note',
 		'GF Sing',
 		'No Animation',
-		'MajinNote',
-		'Pico Sing' // requital
 	];
 	private var noteTypeIntMap:Map<Int, String> = new Map<Int, String>();
 	private var noteTypeMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
@@ -83,40 +78,21 @@ class ChartingState extends MusicBeatState
 	var eventStuff:Array<Dynamic> =
 	[
 		['', "Nothing. Yep, that's right."],
+		['Dadbattle Spotlight', "Used in Dad Battle,\nValue 1: 0/1 = ON/OFF,\n2 = Target Dad\n3 = Target BF"],
 		['Hey!', "Plays the \"Hey!\" animation from Bopeebo,\nValue 1: BF = Only Boyfriend, GF = Only Girlfriend,\nSomething else = Both.\nValue 2: Custom animation duration,\nleave it blank for 0.6s"],
 		['Set GF Speed', "Sets GF head bopping speed,\nValue 1: 1 = Normal speed,\n2 = 1/2 speed, 4 = 1/4 speed etc.\nUsed on Fresh during the beatbox parts.\n\nWarning: Value must be integer!"],
+		['Philly Glow', "Exclusive to Week 3\nValue 1: 0/1/2 = OFF/ON/Reset Gradient\n \nNo, i won't add it to other weeks."],
+		['Kill Henchmen', "For Mom's songs, don't use this please, i love them :("],
 		['Add Camera Zoom', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
+		['BG Freaks Expression', "Should be used only in \"school\" Stage!"],
+		['Trigger BG Ghouls', "Should be used only in \"schoolEvil\" Stage!"],
 		['Play Animation', "Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\nValue 1: Animation to play.\nValue 2: Character (Dad, BF, GF)"],
 		['Camera Follow Pos', "Value 1: X\nValue 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."],
-		["Change Focus", "Sets who the camera is focusing on.\nNote that the must hit changing on a section will reset\nthe focus.\nValue 1: Who to focus on (dad, bf)"],
 		['Alt Idle Animation', "Sets a specified suffix after the idle animation name.\nYou can use this to trigger 'idle-alt' if you set\nValue 2 to -alt\n\nValue 1: Character to set (Dad, BF or GF)\nValue 2: New suffix (Leave it blank to disable)"],
 		['Screen Shake', "Value 1: Camera shake\nValue 2: HUD shake\n\nEvery value works as the following example: \"1, 0.05\".\nThe first number (1) is the duration.\nThe second number (0.05) is the intensity."],
-		['Game Flash', "Value 1: Flash colour\nValue 2: Duration"],
 		['Change Character', "Value 1: Character to change (Dad, BF, GF)\nValue 2: New character's name"],
 		['Change Scroll Speed', "Value 1: Scroll Speed Multiplier (1 is default)\nValue 2: Time it takes to change fully in seconds."],
-		['Static Flash', "Flashes static on the screen\nValue 1: 1 for opaque, 0 for transparent.\nDefaults to 0"],
-		["Simple Jumpscare", "Basic popup of xeno's face\nI'm gonna getcha! I am GOD!"],
-		["Jumpscare", "Too Slow Jumpscare.\nGoofy ahh jumpscare"],
-		["Genesis", "Best used on ycr stage.\nMay still be useful outside of ycr\nto set the notes to pixel notes\nin a large section.\nValue 1: 0 (Pixel) or 1 (Regular)"],
-		["Red VG","Turns on/off Xenophanes's red vignette\nin You Can't Run and Triple Trouble.\nValue 1: 0 (Off) or 1 (On).\nDefaults to 1"],
-		["Light Control","FOR USE IN 'DollStage' ONLY.\nControls the stage in Sunshine\nValue 1: 0 = Light off, 1 = Light on"],
-		["Scroll Velocity","Value 1: Scroll Speed\nValue 2: Constant or multiplier (c for constant, m for multiplier)"], // andromeda speed changes
-		['Set Property', "Value 1: Variable name\nValue 2: New value"],
-		["Play Sound", "Plays a sound\nValue 1: Sound\nValue 2: Volume, defaults to 0.5"],
-	  ['SPEEN', 'Spins the Notes, for Endless & YCR'],
-		['Endless Notes', "Changes the UI to be the funny blue colors n shit"],
-		['Unendless Notes', "Undos the effects of 'Endless Notes'"], // mainly for like.. custom songs n shit!!
-	  ['Majin count', "Value 1:\n 1 = 3\n2 = 2\n 3 = 1\n4 = go!"],
-		['Feel The Sunshine', 'Value 1: 1 = Hide da notes\n2 = Fade in the notes and quickly fade out\n3 = Show da notes'],
-		["Letterboxing", 'Adds black bars to the top and bottom of the screen\n Value 1: 0 = Off, 1 = On'],
-		["Flight Pattern", "Sets the character's flight pattern\nValue 1: circle/circling, hover/hovering, disabled\nUsed by Fleetway and Tails Doll"],
-		["Flight Speed", "Sets the speed at which the character moves in a flight pattern.\nValue 1: Speed, defaults to 1"],
-		["Fleetway","DEPRACTED\nUsed for fleetway voicelines"],
-		["Fleetway Intro", "Lets see how fast you can REALLY go!\nLiterally just makes the opponent fly up"],
-		["Fleetway Laser", "EAT THIS! Place this where the player should dodge"],
-		["Fleetway Charge Sound","Plays the laser charge-up sound\nOnly not apart of Fleetway Laser because\nChaos has laser charge up sounds itself and I dont trust myself to make it automatically sync well"],
-		["Flight Timer", "Sets the internal flight timer used to determine where\na flying character is in their pattern.\nValue 1: Timer, defaults to 0\nUsed by Fleetway and Tails Doll"],
-		["Whisper", "Requital Whisper Section.\nShould only be used on requite stage\nValue 1: 0 (Whisper) or 1 (Regular)"]
+		['Set Property', "Value 1: Variable name\nValue 2: New value"]
 	];
 
 	var _file:FileReference;
@@ -1679,11 +1655,6 @@ class ChartingState extends MusicBeatState
 
 		if (!blockInput)
 		{
-			if (FlxG.keys.justPressed.ESCAPE)
-			{
-				autosaveSong();
-				LoadingState.loadAndSwitchState(new editors.EditorPlayState(sectionStartTime()));
-			}
 			if (FlxG.keys.justPressed.ENTER)
 			{
 				autosaveSong();

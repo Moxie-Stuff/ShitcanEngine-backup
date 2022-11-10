@@ -225,8 +225,8 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			FlxTransitionableState.defaultTransIn = SonicTransitionSubstate;
-			FlxTransitionableState.defaultTransOut = SonicTransitionSubstate;
+			FlxTransitionableState.defaultTransIn = FadeTransitionSubstate;
+			FlxTransitionableState.defaultTransOut = FadeTransitionSubstate;
 			/*var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
 			diamond.persist = true;
 			diamond.destroyOnNoUse = false;

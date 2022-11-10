@@ -409,6 +409,11 @@ class Character extends FlxSprite
 			camOffX = camOffsets.get(AnimName)[0];
 			camOffY = camOffsets.get(AnimName)[1];
 		}
+		else if (camOffsets.exists(AnimName.replace("-loop", "")) && camOffsets.get(AnimName.replace("-loop", "")).length == 2)
+		{
+			camOffX = camOffsets.get(AnimName.replace("-loop", ""))[0];
+			camOffY = camOffsets.get(AnimName.replace("-loop", ""))[1];
+		}
 
 		if (curCharacter.startsWith('gf'))
 		{

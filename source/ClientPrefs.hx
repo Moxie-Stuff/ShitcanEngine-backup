@@ -21,6 +21,7 @@ class ClientPrefs {
 	public static var camZooms:Bool = true;
 	public static var hideHud:Bool = false;
 	public static var multicoreLoading:Bool = true;
+	public static var camMovement:Bool = true;
 	public static var loadingThreads:Int = Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS"))/2);
 	public static var noteOffset:Int = 0;
 	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
@@ -70,6 +71,7 @@ class ClientPrefs {
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public static var ratingOffset:Int = 0;
+	public static var epicWindow:Int = 22;
 	public static var sickWindow:Int = 45;
 	public static var goodWindow:Int = 90;
 	public static var badWindow:Int = 135;
@@ -124,6 +126,7 @@ class ClientPrefs {
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
 		FlxG.save.data.multicoreLoading = multicoreLoading;
+		FlxG.save.data.camMovement = camMovement;
 		FlxG.save.data.loadingThreads = loadingThreads;
 		FlxG.save.data.arrowHSV = arrowHSV;
 		FlxG.save.data.quantHSV = quantHSV;
@@ -139,6 +142,7 @@ class ClientPrefs {
 		FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
 
 		FlxG.save.data.ratingOffset = ratingOffset;
+		FlxG.save.data.epicWindow = epicWindow;
 		FlxG.save.data.sickWindow = sickWindow;
 		FlxG.save.data.goodWindow = goodWindow;
 		FlxG.save.data.badWindow = badWindow;
@@ -210,6 +214,10 @@ class ClientPrefs {
 		if(FlxG.save.data.multicoreLoading != null) {
 			multicoreLoading = FlxG.save.data.multicoreLoading;
 		}
+		if (FlxG.save.data.camMovement != null)
+		{
+			camMovement = FlxG.save.data.camMovement;
+		}
 		if(FlxG.save.data.loadingThreads != null) {
 			loadingThreads = FlxG.save.data.loadingThreads;
 			if(loadingThreads > Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS")))){
@@ -250,6 +258,9 @@ class ClientPrefs {
 
 		if(FlxG.save.data.ratingOffset != null) {
 			ratingOffset = FlxG.save.data.ratingOffset;
+		}
+		if(FlxG.save.data.epicWindow != null) {
+			epicWindow = FlxG.save.data.epicWindow;
 		}
 		if(FlxG.save.data.sickWindow != null) {
 			sickWindow = FlxG.save.data.sickWindow;

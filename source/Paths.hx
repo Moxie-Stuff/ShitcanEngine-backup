@@ -72,7 +72,7 @@ class Paths
 				var obj = currentTrackedAssets.get(key);
 				@:privateAccess
 				if (obj != null) {
-					trace("killing " + key);
+					// trace("killing " + key);
 					openfl.Assets.cache.removeBitmapData(key);
 					FlxG.bitmap._cache.remove(key);
 					obj.destroy();
@@ -369,14 +369,14 @@ class Paths
 				newGraphic.persist = true;
 				currentTrackedAssets.set(path, newGraphic);
 				#if traceLoading
-				trace(path, newGraphic);
+				// trace(path, newGraphic);
 				#end
 			}
 			localTrackedAssets.push(path);
 			return currentTrackedAssets.get(path);
 		}
-		trace(path);
-		trace('oh no its returning null NOOOO');
+		// trace(path);
+		trace('oh no, ' + path + ', its returning null NOOOO');
 		return null;
 	}
 
@@ -503,7 +503,7 @@ class Paths
 								if(global)globalMods.push(dat[0]);
 							}
 						}catch(e:Dynamic){
-							trace(e);
+							// trace(e);
 						}
 					}
 				}

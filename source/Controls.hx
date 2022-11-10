@@ -39,10 +39,6 @@ enum abstract Action(String) to String from String
 	var NOTE_RIGHT_R = "note_right-release";
 	var NOTE_DOWN_R = "note_down-release";
 
-	var DODGE = "dodge";
-	var DODGE_R = "dodge-release";
-	var DODGE_P = "dodge-press";
-
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
@@ -76,9 +72,6 @@ abstract Action(String) to String from String
 	var NOTE_LEFT_R = "note_left-release";
 	var NOTE_RIGHT_R = "note_right-release";
 	var NOTE_DOWN_R = "note_down-release";
-	var DODGE = "dodge";
-	var DODGE_R = "dodge-release";
-	var DODGE_P = "dodge-press";
 	var ACCEPT = "accept";
 	var BACK = "back";
 	var PAUSE = "pause";
@@ -107,7 +100,6 @@ enum Control
 	NOTE_LEFT;
 	NOTE_RIGHT;
 	NOTE_DOWN;
-	DODGE;
 	RESET;
 	ACCEPT;
 	BACK;
@@ -152,10 +144,6 @@ class Controls extends FlxActionSet
 	var _note_leftR = new FlxActionDigital(Action.NOTE_LEFT_R);
 	var _note_rightR = new FlxActionDigital(Action.NOTE_RIGHT_R);
 	var _note_downR = new FlxActionDigital(Action.NOTE_DOWN_R);
-
-	var _dodge = new FlxActionDigital(Action.DODGE);
-	var _dodgeP = new FlxActionDigital(Action.DODGE_P);
-	var _dodgeR = new FlxActionDigital(Action.DODGE_R);
 
 	var _accept = new FlxActionDigital(Action.ACCEPT);
 	var _back = new FlxActionDigital(Action.BACK);
@@ -311,21 +299,6 @@ class Controls extends FlxActionSet
 	inline function get_RESET()
 		return _reset.check();
 
-	public var DODGE_R(get, never):Bool;
-
-	inline function get_DODGE_R()
-		return _dodgeR.check();
-
-	public var DODGE_P(get, never):Bool;
-
-	inline function get_DODGE_P()
-		return _dodgeP.check();
-
-	public var DODGE(get, never):Bool;
-
-	inline function get_DODGE()
-		return _dodge.check();
-
 	#if (haxe >= "4.0.0")
 	public function new(name, scheme = None)
 	{
@@ -344,17 +317,14 @@ class Controls extends FlxActionSet
 		add(_ui_rightR);
 		add(_ui_downR);
 		add(_note_up);
-		add(_dodge);
 		add(_note_left);
 		add(_note_right);
 		add(_note_down);
 		add(_note_upP);
-		add(_dodgeP);
 		add(_note_leftP);
 		add(_note_rightP);
 		add(_note_downP);
 		add(_note_upR);
-		add(_dodgeR);
 		add(_note_leftR);
 		add(_note_rightR);
 		add(_note_downR);
@@ -451,7 +421,6 @@ class Controls extends FlxActionSet
 			case UI_LEFT: _ui_left;
 			case UI_RIGHT: _ui_right;
 			case NOTE_UP: _note_up;
-			case DODGE: _dodge;
 			case NOTE_DOWN: _note_down;
 			case NOTE_LEFT: _note_left;
 			case NOTE_RIGHT: _note_right;
@@ -498,10 +467,6 @@ class Controls extends FlxActionSet
 				func(_note_up, PRESSED);
 				func(_note_upP, JUST_PRESSED);
 				func(_note_upR, JUST_RELEASED);
-			case DODGE:
-				func(_dodge, PRESSED);
-				func(_dodgeP, JUST_PRESSED);
-				func(_dodgeR, JUST_RELEASED);
 			case NOTE_LEFT:
 				func(_note_left, PRESSED);
 				func(_note_leftP, JUST_PRESSED);
@@ -682,7 +647,6 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.UI_LEFT, keysMap.get('ui_left'));
 				inline bindKeys(Control.UI_RIGHT, keysMap.get('ui_right'));
 				inline bindKeys(Control.NOTE_UP, keysMap.get('note_up'));
-				inline bindKeys(Control.DODGE, keysMap.get('dodge'));
 				inline bindKeys(Control.NOTE_DOWN, keysMap.get('note_down'));
 				inline bindKeys(Control.NOTE_LEFT, keysMap.get('note_left'));
 				inline bindKeys(Control.NOTE_RIGHT, keysMap.get('note_right'));
@@ -697,7 +661,6 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.UI_LEFT, [A]);
 				inline bindKeys(Control.UI_RIGHT, [D]);
 				inline bindKeys(Control.NOTE_UP, [W]);
-				inline bindKeys(Control.DODGE, [SPACE]);
 				inline bindKeys(Control.NOTE_DOWN, [S]);
 				inline bindKeys(Control.NOTE_LEFT, [A]);
 				inline bindKeys(Control.NOTE_RIGHT, [D]);
@@ -711,7 +674,6 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.UI_LEFT, [FlxKey.LEFT]);
 				inline bindKeys(Control.UI_RIGHT, [FlxKey.RIGHT]);
 				inline bindKeys(Control.NOTE_UP, [FlxKey.UP]);
-				inline bindKeys(Control.DODGE, [FlxKey.SPACE]);
 				inline bindKeys(Control.NOTE_DOWN, [FlxKey.DOWN]);
 				inline bindKeys(Control.NOTE_LEFT, [FlxKey.LEFT]);
 				inline bindKeys(Control.NOTE_RIGHT, [FlxKey.RIGHT]);
@@ -731,7 +693,6 @@ class Controls extends FlxActionSet
 				bindKeys(Control.UI_LEFT, [A, FlxKey.LEFT]);
 				bindKeys(Control.UI_RIGHT, [D, FlxKey.RIGHT]);
 				bindKeys(Control.NOTE_UP, [W, FlxKey.UP]);
-				bindKeys(Control.DODGE, [SPACE]);
 				bindKeys(Control.NOTE_DOWN, [S, FlxKey.DOWN]);
 				bindKeys(Control.NOTE_LEFT, [A, FlxKey.LEFT]);
 				bindKeys(Control.NOTE_RIGHT, [D, FlxKey.RIGHT]);
@@ -745,7 +706,6 @@ class Controls extends FlxActionSet
 				bindKeys(Control.UI_LEFT, [A]);
 				bindKeys(Control.UI_RIGHT, [D]);
 				bindKeys(Control.NOTE_UP, [W]);
-				bindKeys(Control.DODGE, [SPACE]);
 				bindKeys(Control.NOTE_DOWN, [S]);
 				bindKeys(Control.NOTE_LEFT, [A]);
 				bindKeys(Control.NOTE_RIGHT, [D]);
@@ -759,7 +719,6 @@ class Controls extends FlxActionSet
 				bindKeys(Control.UI_LEFT, [FlxKey.LEFT]);
 				bindKeys(Control.UI_RIGHT, [FlxKey.RIGHT]);
 				bindKeys(Control.NOTE_UP, [FlxKey.UP]);
-				bindKeys(Control.DODGE, [SPACE]);
 				bindKeys(Control.NOTE_DOWN, [FlxKey.DOWN]);
 				bindKeys(Control.NOTE_LEFT, [FlxKey.LEFT]);
 				bindKeys(Control.NOTE_RIGHT, [FlxKey.RIGHT]);

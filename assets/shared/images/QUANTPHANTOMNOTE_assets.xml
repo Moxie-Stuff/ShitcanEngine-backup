@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="QUANTPHANTOMNOTE_assets.png">
-	<!-- Created with Adobe Animate version 21.0.5.40714 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="blue0000" x="2" y="2" width="186" height="183"/>
-	<SubTexture name="green0000" x="190" y="2" width="186" height="183"/>
-	<SubTexture name="purple0000" x="2" y="187" width="183" height="186"/>
-	<SubTexture name="red0000" x="187" y="187" width="183" height="186"/>
-</TextureAtlas>

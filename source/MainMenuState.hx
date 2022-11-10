@@ -33,6 +33,7 @@ class MainMenuState extends MusicBeatState
 	private var camAchievement:FlxCamera;
 
 	var optionShit:Array<String> = [
+		'story_mode',
 		'freeplay',
 		#if MODS_ALLOWED 'mods', #end
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
@@ -256,9 +257,6 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
-
-			else if (FlxG.keys.justPressed.EIGHT)
-				MusicBeatState.switchState(new FreeplayStateNew());
 			#end
 		}
 

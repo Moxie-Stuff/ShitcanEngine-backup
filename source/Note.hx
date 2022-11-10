@@ -85,7 +85,7 @@ class Note extends FlxSprite
 	public var gfNote:Bool = false;
 	public var baseScaleX:Float = 1;
 	public var baseScaleY:Float = 1;
-	public var extraNote:Bool = false; // for "extras", pico etc
+
 	private var earlyHitMult:Float = 0.5;
 
 	@:isVar
@@ -140,7 +140,6 @@ class Note extends FlxSprite
 	public static var defaultNotes = [
 		'No Animation',
 		'GF Sing',
-		'Pico Sing',
 		''
 	];
 
@@ -188,18 +187,11 @@ class Note extends FlxSprite
 			colorSwap.hue = ClientPrefs.quantHSV[idx][0] / 360;
 			colorSwap.saturation = ClientPrefs.quantHSV[idx][1] / 100;
 			colorSwap.lightness = ClientPrefs.quantHSV[idx][2] / 100;
-			if(noteSplashTexture == 'noteSplashes')noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
+			if (noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin==null)noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
 		}else{
 			colorSwap.hue = ClientPrefs.arrowHSV[noteData % 4][0] / 360;
 			colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
 			colorSwap.lightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
-		}
-
-		if(PlayState.arrowSkin == 'Majin_Notes'){
-			noteSplashTexture = 'endlessNoteSplashes';
-			colorSwap.hue = 0;
-			colorSwap.saturation = 0;
-			colorSwap.lightness = 0;
 		}
 
 		noteScript = null;
@@ -219,50 +211,12 @@ class Note extends FlxSprite
 						missHealth = 0.3;
 					}
 					hitCausesMiss = true;
-				case 'Pixel Note':
-					var isPixel = PlayState.isPixelStage;
-					PlayState.isPixelStage = true;
-					reloadNote('', '');
-					PlayState.isPixelStage = isPixel;
-				case 'Static Note':
-					if(isSustainNote){
-						kill();
-						destroy();
-						return noteType;
-					}
-					colorSwap.hue = 0;
-					colorSwap.saturation = 0;
-					colorSwap.lightness = 0;
-					missHealth = 0.3;
-					reloadNote('STATIC');
-				case 'MajinNote':
-					if(!isQuant){
-						if(PlayState.arrowSkin != 'Majin_Notes')
-							reloadNote('MAJIN');
-					}
-					value = '';
 
-
-				case 'Phantom Note':
-					if(isSustainNote){
-						kill();
-						destroy();
-						return noteType;
-					}
-					missHealth = 0;
-					hitbox *= 0.5;
-					reloadNote('PHANTOM');
-					ignoreNote = true;
-					hitCausesMiss = true;
-					noteSplashDisabled = true; // I FUCKING HATE THIS PLEASE TURN IT OFF AAAAAAAAAAA
-					// noteSplashTexture = 'HURTnoteSplashes';
 				case 'No Animation':
 					noAnimation = true;
 					noMissAnimation = true;
 				case 'GF Sing':
 					gfNote = true;
-				case 'Pico Sing':
-					extraNote = true;
 				default:
 					if (!inEditor)
 						noteScript = PlayState.instance.notetypeScripts.get(value);
