@@ -1,4 +1,8 @@
 package scripts;
+
+import flixel.FlxBasic;
+import flixel.FlxSprite;
+
 using StringTools;
 /**
 This is a base class meant to be overridden so you can easily implement custom script types

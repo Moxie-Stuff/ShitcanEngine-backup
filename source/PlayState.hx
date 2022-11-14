@@ -346,6 +346,10 @@ class PlayState extends MusicBeatState
 	public var funkyScripts:Array<FunkinScript> = [];
 	public var hscriptArray:Array<FunkinHScript> = [];
 
+	//script stage stuff
+	public var bgStuff:FlxTypedGroup<BGSprite>;
+	public var fgStuff:FlxTypedGroup<BGSprite>;
+
 	public var notetypeScripts:Map<String, FunkinScript> = []; // custom notetypes for scriptVer '1'
 	public var eventScripts:Map<String, FunkinScript> = []; // custom events for scriptVer '1'
 
@@ -361,6 +365,10 @@ class PlayState extends MusicBeatState
 	public var focusedChar:Character;
 
 	var precacheList:Map<String, String> = new Map<String, String>();
+
+	override function add(Object:FlxBasic):FlxBasic {
+		return super.add(Object);
+	}
 
 	public function set_cpuControlled(val:Bool){
 		if(playFields!=null && playFields.members.length > 0){
@@ -698,6 +706,11 @@ class PlayState extends MusicBeatState
 				foregroundSprites.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
 				if (!ClientPrefs.lowQuality)
 					foregroundSprites.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
+			default:
+				bgStuff = new FlxTypedGroup<BGSprite>();
+				fgStuff = new FlxTypedGroup<BGSprite>();
+
+				add(bgStuff);
 		}
 	}
 
@@ -1197,6 +1210,9 @@ class PlayState extends MusicBeatState
 				add(dadGroup);
 				add(boyfriendGroup);
 		}
+
+		if(fgStuff != null)
+			add(fgStuff);
 
 		switch(curStage)
 		{
@@ -2120,7 +2136,7 @@ class PlayState extends MusicBeatState
 			var timeForStuff:Float = Conductor.crochet / 1000 * 5;
 			FlxG.sound.music.fadeOut(timeForStuff);
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, timeForStuff, {ease: FlxEase.quadInOut});
-			moveCamera(true);
+			moveCamera(0);
 			startCountdown();
 
 			dadGroup.alpha = 1;
@@ -4301,9 +4317,13 @@ class PlayState extends MusicBeatState
 				focusedChar = null; // forces the focus to shift
 				switch(value1.toLowerCase().trim()){
 					case 'dad' | 'opponent':
-						moveCamera(true);
+						moveCamera(0);
+					case 'bf':
+						moveCamera(1);
+					case 'gf':
+						moveCamera(2);
 					default:
-						moveCamera(false);
+						moveCamera(1);
 				}
 			case 'Game Flash':
 				var dur:Float = Std.parseFloat(value2);
@@ -4650,7 +4670,7 @@ class PlayState extends MusicBeatState
 		{
 			if(whosTurn!='dad'){
 				whosTurn = 'dad';
-				moveCamera(true);
+				moveCamera(0);
 				callOnScripts('onMoveCamera', ['dad']);
 			}
 		}
@@ -4658,7 +4678,7 @@ class PlayState extends MusicBeatState
 		{
 			if(whosTurn!='boyfriend'){
 				whosTurn = 'boyfriend';
-				moveCamera(false);
+				moveCamera(1);
 				callOnScripts('onMoveCamera', ['boyfriend']);
 			}
 		}
@@ -4679,10 +4699,10 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function moveCamera(isDad:Bool)
+	public function moveCamera(isDad:Int)
 	{
 		trace(isDad?"focused on dad":"focused on bf");
-		if(isDad)
+		if(isDad = 0)
 		{
 			if(focusedChar!=dad){
 				focusedChar = dad;
@@ -4691,7 +4711,12 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			var char:Character = boyfriend;
+			var char:Character;
+			if(isDad = 1)
+				char = boyfriend;
+			else if (isDad = 2)
+				char = gf;
+
 			if(focusedChar!=char){
 				focusedChar= char;
 				updateCamFollow();
@@ -6267,6 +6292,7 @@ class PlayState extends MusicBeatState
 		return null;
 	}
 	#end
+
 
 	override public function switchTo(nextState: Dynamic){
 		if(isPixelStage != stageData.isPixelStage)

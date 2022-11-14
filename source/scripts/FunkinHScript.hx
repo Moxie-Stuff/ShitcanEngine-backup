@@ -1,10 +1,24 @@
 package scripts;
 
-import flixel.system.FlxSound;
 import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.system.FlxSound;
+import flixel.graphics.tile.FlxGraphicsShader;
+import flixel.group.FlxGroup;
+import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxTimer;
+import haxe.ds.StringMap;
 import hscript.Expr;
 import hscript.Interp;
 import hscript.Parser;
+import openfl.display.GraphicsShader;
+import openfl.display.Shader;
+import openfl.filters.ShaderFilter;
+import sys.FileSystem;
 import lime.utils.AssetType;
 import lime.utils.Assets;
 import sys.io.File;
@@ -64,6 +78,7 @@ class FunkinHScript extends FunkinScript
 		scriptName = name;
 
 		setDefaultVars();
+		set("Sys", Sys);
 		set("FlxG", flixel.FlxG);
 		set("FlxSprite", flixel.FlxSprite);
 		set("Std", Std);
@@ -154,14 +169,15 @@ class FunkinHScript extends FunkinScript
 		set("FunkinHScript", FunkinHScript);
 		set("GameOverSubstate", GameOverSubstate);
 		set("HealthIcon", HealthIcon);
+		set("bgLayer", PlayState.instance.bgStuff);
+		set("fgLayer", PlayState.instance.fgStuff);
 		
-		//adding functions
-		set("add", function(obj:Dynamic){
-			return PlayState.instance.addBehindGF(obj);
-		});
-		set("addAbove", function(obj:Dynamic){
-			return FlxG.state.add(obj);
-		});
+		set("add", PlayState.instance.add);
+
+		// //adding functions
+		// set("add", function(obj:Dynamic){
+		// 	PlayState.instance.add(obj);
+		// });
 			
 		var currentState = flixel.FlxG.state;
 		if ((currentState is PlayState)){
