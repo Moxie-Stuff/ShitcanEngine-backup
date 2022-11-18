@@ -1,0 +1,9 @@
+function onEvent(eventName, value1, value2)
+{
+    switch(eventName){
+        case "Fade In Game":
+            FlxTween.tween(PlayState.instance.camGame, {alpha: 1}, 2);
+        case "Fade In HUD":
+            FlxTween.tween(PlayState.instance.camHUD, {alpha: 1}, 0.5);
+    }
+}

@@ -1,0 +1,28 @@
+function onCreatePost()
+{
+    var bg:FlxSprite = new FlxSprite(-546, -181);
+    bg.loadGraphic(Paths.image("V/whitebg"));
+    bgLayer.add(bg);
+
+    var landscape:FlxSprite = new FlxSprite(-490, -86);
+    landscape.loadGraphic(Paths.image("V/bonus/mountains"));
+    bgLayer.add(landscape);
+
+    var house:FlxSprite = new FlxSprite(82, -225);
+    house.frames = Paths.getSparrowAtlas("V/bonus/house");
+    house.animation.addByPrefix('scale', 'housescaled', 24, true);
+    house.animation.play('scale');
+    bgLayer.add(house);
+
+    var ground:FlxSprite = new FlxSprite(-520, 475);
+    ground.loadGraphic(Paths.image("V/bonus/base"));
+    bgLayer.add(ground);
+}
+
+function onMoveCamera(focus)
+    {
+        if(focus == "dad")
+            PlayState.instance.defaultCamZoom = 1.25;
+        else
+            PlayState.instance.defaultCamZoom = 1.0;
+    }

@@ -66,6 +66,7 @@ import StageData;
 import DialogueBoxPsych;
 import Conductor.Rating;
 import flixel.system.FlxAssets.FlxShader;
+import GlitchShader;
 
 #if sys
 import sys.FileSystem;
@@ -364,7 +365,15 @@ class PlayState extends MusicBeatState
 	private var keysArray:Array<Dynamic>;
 	public var focusedChar:Character;
 
+	// shader stuffs ig
+	public var glitchA:GlitchShaderA;
+	public var glitchB:GlitchShaderB;
+	public var glitchC:Fuck;
+	public var glitchD:DistortGlitchShader;
+
 	var precacheList:Map<String, String> = new Map<String, String>();
+
+	var count:Int;
 
 	override function add(Object:FlxBasic):FlxBasic {
 		return super.add(Object);
@@ -1214,6 +1223,11 @@ class PlayState extends MusicBeatState
 		if(fgStuff != null)
 			add(fgStuff);
 
+		glitchA = new GlitchShaderA();
+		glitchB = new GlitchShaderB();
+		glitchC = new Fuck();
+		glitchD = new DistortGlitchShader();
+		
 		switch(curStage)
 		{
 			case 'spooky':
@@ -3186,6 +3200,8 @@ class PlayState extends MusicBeatState
 
 	function eventPushed(event:EventNote) {
 		switch(event.event) {
+			case 'Play Video':
+				playVideo(event.value1, false);
 			case 'Dadbattle Spotlight':
 				dadbattleBlack = new BGSprite(null, -800, -400, 0, 0);
 				dadbattleBlack.makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
@@ -3728,10 +3744,10 @@ class PlayState extends MusicBeatState
 
 
 
-		if(botplayTxt.visible) {
-			botplaySine += 180 * elapsed;
-			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
-		}
+		// if(botplayTxt.visible) {
+		// 	botplaySine += 180 * elapsed;
+		// 	botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
+		// }
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -4275,6 +4291,8 @@ class PlayState extends MusicBeatState
 
 	public function triggerEventNote(eventName:String, value1:String, value2:String) {
 		switch(eventName) {
+			case 'Play Video':
+				playVideo(value1);
 			case 'Dadbattle Spotlight':
 				var val:Null<Int> = Std.parseInt(value1);
 				if (val == null)
@@ -4692,17 +4710,21 @@ class PlayState extends MusicBeatState
 			camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 			camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];
 			camFollow.y += dad.cameraPosition[1] + opponentCameraOffset[1];
-		}else{
+		}else if (focusedChar == boyfriend){
 			camFollow.set(focusedChar.getMidpoint().x - 100, focusedChar.getMidpoint().y - 100);
 			camFollow.x -= focusedChar.cameraPosition[0] - boyfriendCameraOffset[0];
 			camFollow.y += focusedChar.cameraPosition[1] + boyfriendCameraOffset[1];
+		}else if (focusedChar == gf){
+			camFollow.set(focusedChar.getMidpoint().x - 100, focusedChar.getMidpoint().y - 100);
+			camFollow.x -= focusedChar.cameraPosition[0] - girlfriendCameraOffset[0];
+			camFollow.y += focusedChar.cameraPosition[1] + girlfriendCameraOffset[1];
 		}
 	}
 
 	public function moveCamera(isDad:Int)
 	{
-		trace(isDad?"focused on dad":"focused on bf");
-		if(isDad = 0)
+		// trace(isDad?"focused on dad":"focused on bf");
+		if(isDad == 0)
 		{
 			if(focusedChar!=dad){
 				focusedChar = dad;
@@ -4711,10 +4733,11 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			var char:Character;
-			if(isDad = 1)
+			var char:Character = boyfriend;
+			
+			if(isDad == 1)
 				char = boyfriend;
-			else if (isDad = 2)
+			else if (isDad == 2)
 				char = gf;
 
 			if(focusedChar!=char){
@@ -4944,6 +4967,25 @@ class PlayState extends MusicBeatState
 		}
 	}
 	#end
+
+	public function playVideo(name:String, ?vis:Bool = true){
+		var video = new MP4Sprite(0,0);
+		video.scrollFactor.set();
+		video.cameras = [camHUD];
+		video.visible = vis;
+		video.shader = new GreenScreenShader();
+		video.finishCallback = function(){
+			trace("video gone");
+			remove(video);
+			video.kill();
+		}
+		video.playVideo(Paths.video(name));
+		video.readyCallback = function(){
+			if(vis)
+				video.visible=true;
+		}
+		add(video);
+	}
 
 	public function KillNotes() {
 		while(notes.length > 0) {

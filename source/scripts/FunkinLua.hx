@@ -1211,9 +1211,9 @@ class FunkinLua extends FunkinScript
 			}
 		});
 		Lua_helper.add_callback(lua, "cameraSetTarget", function(target:String) {
-			var isDad:Bool = false;
+			var isDad:Int = 1;
 			if(target == 'dad') {
-				isDad = true;
+				isDad = 0;
 			}
 			PlayState.instance.moveCamera(isDad);
 			return isDad;

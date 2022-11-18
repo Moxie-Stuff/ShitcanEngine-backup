@@ -1,0 +1,39 @@
+// var playerStrums:PlayField;
+// var opponentStrums:PlayField;
+// function preReceptorGeneration(){
+//     trace("pre-receptor gen");
+//     playerStrums = getInstance().playerStrums;
+//     opponentStrums = getInstance().opponentStrums;
+// }
+
+// function sectionChanged(section){
+//   if(section.mustHitSection){
+//     if(opponentStrums.playerControls){
+//       for(strum in opponentStrums){
+//         strum.playAnim("static", true);
+//         strum.resetAnim = 0;
+//       }
+//       opponentStrums.autoPlayed = true;
+//       opponentStrums.playerControls = false;
+//       opponentStrums.noteHitCallback = getInstance().opponentNoteHit;
+
+//       playerStrums.autoPlayed = getInstance().cpuControlled;
+//       playerStrums.playerControls = true;
+//       playerStrums.noteHitCallback = getInstance().goodNoteHit;
+//     }
+//   }else{
+//     if(playerStrums.playerControls){
+//       for(strum in playerStrums){
+//         strum.playAnim("static", true);
+//         strum.resetAnim = 0;
+//       }
+//     }
+//     playerStrums.autoPlayed = true;
+//     playerStrums.playerControls = false;
+//     playerStrums.noteHitCallback = getInstance().opponentNoteHit;
+
+//     opponentStrums.autoPlayed = getInstance().cpuControlled;
+//     opponentStrums.playerControls = true;
+//     opponentStrums.noteHitCallback = getInstance().goodNoteHit;
+//   }
+// }

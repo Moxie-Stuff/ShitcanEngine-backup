@@ -8,6 +8,8 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
+import flixel.util.FlxColor;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
@@ -91,9 +93,14 @@ class FunkinHScript extends FunkinScript
 		set("FlxTimer", flixel.util.FlxTimer);
 		set("FlxTween", flixel.tweens.FlxTween);
 		set("FlxEase", flixel.tweens.FlxEase);
+		set("FlxText", flixel.text.FlxText);
 		set("FlxSave", flixel.util.FlxSave); // should probably give it 1 save instead of giving it FlxSave
 		set("FlxBar", flixel.ui.FlxBar);
+		set("FlxGraphicsShader", flixel.graphics.tile.FlxGraphicsShader);
+		set("ShaderFilter", openfl.filters.ShaderFilter);
 		set("StringTools", StringTools);
+		set("ColorSwap", HSLColorSwap);
+		set("MP4Sprite", MP4Sprite);
 		set("trace", function(text:String)
 		{
 			scriptTrace(text);

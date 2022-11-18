@@ -1,0 +1,39 @@
+function onEvent(eventName, value1, value2) 
+{
+    switch(eventName){
+        case "Fade In":
+            FlxTween.tween(PlayState.instance.camHUD, {alpha: 1}, 5, {
+                onComplete: function(twn:FlxTween)
+                    {
+                        FlxTween.tween(PlayState.instance.camGame, {alpha: 1}, 5, {onComplete: function(twn:FlxTween){
+                            FlxTween.tween(PlayState.instance.dad, {alpha: 1}, 2.5);
+                        }});
+                    }
+            });
+        case "Spin":
+             switch(value1){
+                case "1":
+                    for (i in 0...PlayState.instance.opponentStrums.length)
+                        FlxTween.tween(PlayState.instance.opponentStrums.members[i], {angle: PlayState.instance.opponentStrums.members[i].angle + 360}, 0.2, {ease: FlxEase.cubeInOut}); 
+                case "2":
+                    for (i in 0...PlayState.instance.playerStrums.length)
+                        FlxTween.tween(PlayState.instance.playerStrums.members[i], {angle: PlayState.instance.opponentStrums.members[i].angle + 360}, 0.2, {ease: FlxEase.cubeInOut});
+                case "0":
+                    for (i in 0...PlayState.instance.opponentStrums.length)
+                        FlxTween.tween(PlayState.instance.opponentStrums.members[i], {angle: PlayState.instance.opponentStrums.members[i].angle + 360}, 0.2, {ease: FlxEase.cubeInOut});
+                    for (i in 0...PlayState.instance.playerStrums.length)
+                        FlxTween.tween(PlayState.instance.playerStrums.members[i], {angle: PlayState.instance.opponentStrums.members[i].angle + 360}, 0.2, {ease: FlxEase.cubeInOut});
+
+                default:
+                    for (i in 0...PlayState.instance.opponentStrums.length)
+                        FlxTween.tween(PlayState.instance.opponentStrums.members[i], {angle: PlayState.instance.opponentStrums.members[i].angle + 360}, 0.2, {ease: FlxEase.cubeInOut});
+                    for (i in 0...PlayState.instance.playerStrums.length)
+                        FlxTween.tween(PlayState.instance.playerStrums.members[i], {angle: PlayState.instance.opponentStrums.members[i].angle + 360}, 0.2, {ease: FlxEase.cubeInOut});
+    
+            }
+        case "Play Video":
+            PlayState.instance.playVideo(value1);
+
+    }
+
+}

@@ -1,0 +1,3 @@
+Value 1:
+Game = Fade in game
+HUD = Fade in HUD
