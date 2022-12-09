@@ -73,6 +73,8 @@ class FunkinScript {
 			set('botPlay', PlayState.instance.cpuControlled);
 			set('practice', PlayState.instance.practiceMode);
 			set('startedCountdown', false);
+
+			// call('onCreate');
 		}
 		else
 		{
@@ -106,8 +108,6 @@ class FunkinScript {
 		set('curDecBeat', 0);
 		set('curDecStep', 0);
 		set('version', MainMenuState.psychEngineVersion.trim());
-
-		PlayState.instance.callOnScripts('onCreate', []);
 	}
 }
 

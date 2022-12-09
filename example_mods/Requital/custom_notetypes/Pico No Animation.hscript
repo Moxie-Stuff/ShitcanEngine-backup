@@ -1,5 +1,4 @@
 function setupNote(note:Note){
-  note.extraNote = true;
   note.noAnimation = true;
   note.noMissAnimation = true;
 }

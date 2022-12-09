@@ -69,8 +69,7 @@ class GlitchShaderB extends FlxShader {
     public var amount(get, set):Float = 0;
     function get_amount(){
         return Amount.value[0];
-    }
-	function set_amount(val:Float)
+    }	function set_amount(val:Float)
 	{
 		return Amount.value[0] = val;
 	}

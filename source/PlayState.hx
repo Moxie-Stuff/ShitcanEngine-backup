@@ -719,6 +719,11 @@ class PlayState extends MusicBeatState
 				bgStuff = new FlxTypedGroup<BGSprite>();
 				fgStuff = new FlxTypedGroup<BGSprite>();
 
+				var ntsc = new FuckScorp();
+				var ntscfilter = new ShaderFilter(ntsc);
+
+				FlxG.game.setFilters([ntscfilter]);
+
 				add(bgStuff);
 		}
 	}
@@ -789,7 +794,7 @@ class PlayState extends MusicBeatState
 
 		// for lua
 		instance = this;
-
+	
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
 		PauseSubState.songName = null; //Reset to default

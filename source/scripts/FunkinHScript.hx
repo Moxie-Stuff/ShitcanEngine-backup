@@ -60,6 +60,7 @@ class FunkinHScript extends FunkinScript
 	{
 		if (name == null)
 			name = file;
+
 		return parseString(File.getContent(file), name);
 	}
 
@@ -78,6 +79,8 @@ class FunkinHScript extends FunkinScript
 	{
 		scriptType = 'hscript';
 		scriptName = name;
+
+		PlayState.instance.callOnScripts('onCreate', []);
 
 		setDefaultVars();
 		set("Sys", Sys);
