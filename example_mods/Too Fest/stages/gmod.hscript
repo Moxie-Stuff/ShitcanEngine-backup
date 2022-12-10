@@ -3,26 +3,18 @@ var sillyOverlay:ShaderFilter;
 var canRainbow:Bool = false;
 var canFloat:Bool = false;
 
-var lyrics:FlxText;
-
 var bar1:FlxSprite;
 var bar2:FlxSprite;
 
 var newVal:Float = 0.1;
 
-function onCreatePost() {
-    var bandicam:FlxSprite = new FlxSprite();
-    bandicam.loadGraphic(Paths.image("bandicom"));
-    bandicam.cameras = [PlayState.instance.camHUD];
-    bandicam.x = FlxG.width / 2 - (bandicam.width / 2);
-    add(bandicam);
+function onCreatePost()
+{
+    // PlayState.instance.boyfriend.visible = false;
 
-    gmod = new FlxSprite(-300, -100);
-    gmod.loadGraphic(Paths.image("gmod"));
-    gmod.scale.set(1.2, 1.2);
-    bgLayer.add(gmod);
+    var machinima:FlxSprite = new FlxSprite(-600, 600);
+    machinima.loadGraphic(Paths.image("machinima"));
 
-    //bars
     bar1 = new FlxSprite(0, 0);
     bar1.makeGraphic(160, 720, 0xFF000000);
     bar1.cameras = [PlayState.instance.camHUD];
@@ -34,36 +26,29 @@ function onCreatePost() {
     bar2.x = FlxG.width - (bar2.width);
     add(bar2);
 
-    //lyrics
-    lyrics = new FlxText();
-    lyrics.text = " ";
-    lyrics.cameras = [PlayState.instance.camHUD];
-    lyrics.scale.set(4,4);
-    lyrics.updateHitbox();
-    lyrics.screenCenter();
-    lyrics.y = PlayState.instance.healthBarBG.y - (lyrics.height * 2);
-    add(lyrics);
+    gmod = new FlxSprite(-300, -100);
+    gmod.loadGraphic(Paths.image("gmod"));
+    gmod.scale.set(1.2, 1.2);
+    bgLayer.add(gmod);
 
-    //shader
-    colorSwap = new ColorSwap();
-    colorSwap.saturation = 0;
-    sillyOverlay = new ShaderFilter(colorSwap.shader);
-    PlayState.instance.camGame.setFilters([sillyOverlay]);
-    PlayState.instance.camHUD.setFilters([sillyOverlay]);
-
-    //strum move
-    for (i in 0...PlayState.instance.opponentStrums.length)
-        PlayState.instance.opponentStrums.members[i].x = 174 + (112 * i);
-        // trace(PlayState.instance.opponentStrums.members[i].x);
     for (i in 0...PlayState.instance.playerStrums.length)
-        PlayState.instance.playerStrums.members[i].x = 654 + (112 * i);
-        // PlayState.instance.playerStrums.members[i].x = (640 + (112 / 4)) + (i * 112);
+        PlayState.instance.playerStrums.members[i].x -= 80;
+    for (i in 0...PlayState.instance.opponentStrums.length)
+        PlayState.instance.opponentStrums.members[i].x += 80;
 
+    sillyOverlay = new ShaderFilter(PlayState.instance.glitchB);
+    PlayState.instance.glitchB.amount = 0;
+    PlayState.instance.camGame.setFilters([sillyOverlay]);
 
-    //lol
     PlayState.instance.camGame.alpha = 0;
     PlayState.instance.camHUD.alpha = 0;
     PlayState.instance.dad.alpha = 0;
+
+    colorSwap = new ColorSwap();
+    colorSwap.saturation = 0;
+    var sillyOverlay = new ShaderFilter(colorSwap.shader);
+    PlayState.instance.camGame.setFilters([sillyOverlay]);
+    PlayState.instance.camHUD.setFilters([sillyOverlay]);
 }
         
 function onUpdate(elapsed) {
@@ -81,46 +66,6 @@ function onUpdate(elapsed) {
 }
 
 function onEvent(eventName, value1, value2) {
-    if(eventName == "Aspect Change"){
-        switch(value1){
-            case "FULLSCREEN":
-                PlayState.instance.camGame.alpha = 1;
-                bar1.visible = false;
-                bar2.visible = false;
-
-                for (i in 0...PlayState.instance.playerStrums.length)
-                    PlayState.instance.playerStrums.members[i].x = ((1120 - (112 * 4) + (112 * i)));
-                for (i in 0...PlayState.instance.opponentStrums.length)
-                    PlayState.instance.opponentStrums.members[i].x = 160 + (112 * i);
-            case "4:3":
-                PlayState.instance.camGame.alpha = 1;
-                bar1.visible = true;
-                bar2.visible = true;
-            
-                for (i in 0...PlayState.instance.opponentStrums.length)
-                    PlayState.instance.opponentStrums.members[i].x = 174 + (112 * i);
-                for (i in 0...PlayState.instance.playerStrums.length)
-                    PlayState.instance.playerStrums.members[i].x = 654 + (112 * i);            }
-    }
-    if (eventName == "Show You"){
-        switch(value1){
-            case "ON":
-                PlayState.instance.camGame.alpha = 0;
-                lyrics.text = value2;
-                bar1.visible = false;
-                bar2.visible = false;
-
-                for (i in 0...PlayState.instance.opponentStrums.length)
-                    PlayState.instance.opponentStrums.members[i].x -= 1000;
-                for (i in 0...PlayState.instance.playerStrums.length)
-                    FlxTween.tween(PlayState.instance.playerStrums.members[i], {x: PlayState.instance.playerStrums.members[i].x + 80, angle: PlayState.instance.playerStrums.members[i].angle + 360}, 0.2);
-            default:
-                // PlayState.instance.camGame.alpha = 1;
-                lyrics.text = value2;
-                // bar1.visible = false;
-                // bar2.visible = false;
-            }
-    }
     if (eventName == "Rainbow"){
         if(value2 != "Super"){
             if(value1 == "ON"){
