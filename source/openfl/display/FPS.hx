@@ -1,5 +1,6 @@
 package openfl.display;
 
+import meta.data.*;
 import haxe.Timer;
 import openfl.events.Event;
 import openfl.text.TextField;

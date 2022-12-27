@@ -1,4 +1,0 @@
-function setupNote(note:Note){
-  note.noAnimation = true;
-  note.noMissAnimation = true;
-}
