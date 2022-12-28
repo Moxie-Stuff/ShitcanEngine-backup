@@ -83,6 +83,10 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Shitcan Contributors'],
+			['DuskieWhy', 'duskie', 'Main contributor\nOptimized HScript, fixed main bugs, sorted source folders', 'https://twitter.com/DuskieWhy', '6D32A8'],
+			['NebulaZorua', 'neb', 'Wrote majority of HScript foundation, Quant notes', 'https://twitter.com/Nebula_Zorua', 'B300B3'],
+			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',							'https://twitter.com/Shadow_Mario_',	'444444'],
 			['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',						'https://twitter.com/RiverOaken',		'C30085'],

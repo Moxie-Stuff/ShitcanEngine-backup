@@ -11,6 +11,7 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
+import flixel.addons.display.FlxBackdrop;
 import haxe.Json;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -32,6 +33,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
+import flixel.util.FlxGradient;
+import flixel.math.FlxMath;
 import openfl.Assets;
 import meta.data.*;
 import meta.data.options.*;
@@ -71,6 +74,12 @@ class TitleState extends MusicBeatState
 	var curWacky:Array<String> = [];
 
 	var wackyImage:FlxSprite;
+
+	var wall:FlxSprite;
+	var duckie:FlxSprite;
+	var logo2:FlxSprite;
+	var checkerboard:FlxBackdrop;
+	var checkerboard2:FlxBackdrop;
 
 	#if TITLE_SCREEN_EASTER_EGG
 	var easterEggKeys:Array<String> = [
@@ -321,9 +330,36 @@ class TitleState extends MusicBeatState
 		}
 		gfDance.antialiasing = ClientPrefs.globalAntialiasing;
 
-		add(gfDance);
-		gfDance.shader = swagShader.shader;
-		add(logoBl);
+		// add(gfDance);
+		var shit = new FlxSprite(-1000).makeGraphic(FlxG.width * 4, FlxG.height * 8, 0xff261553);
+		shit.scrollFactor.set();
+		add(shit);	
+		
+		wall = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height * 8, [0x0, 0xff53154e, 0xff153e53, 0x0]);
+		// wall.setPosition(0, ((FlxG.height * 4) * -1));
+		wall.scrollFactor.set(0, 0);
+		wall.updateHitbox();
+		add(wall);
+
+		checkerboard2 = new FlxBackdrop(Paths.image('menuCheckerboard'), 0, 0, true, true);
+		checkerboard2.alpha = 0.55;
+		checkerboard2.scale.set(5, 5);
+		checkerboard2.color = 0xFFeb34c9;
+		add(checkerboard2);
+
+		duckie = new FlxSprite(0, 300).loadGraphic(Paths.image("duskieMADDD"));
+		duckie.screenCenter(X);
+		add(duckie);
+
+		logo2 = new FlxSprite(0, 0).loadGraphic(Paths.image("logo"));
+		logo2.scale.set(0.85, 0.85);
+		logo2.updateHitbox();
+		logo2.screenCenter(X);
+		add(logo2);
+
+		wall.shader = swagShader.shader;
+		duckie.shader = swagShader.shader;
+		// add(logoBl);
 		logoBl.shader = swagShader.shader;
 
 		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
@@ -409,8 +445,28 @@ class TitleState extends MusicBeatState
 	var transitioning:Bool = false;
 	private static var playJingle:Bool = false;
 
+	var floaty:Float = 0;
 	override function update(elapsed:Float)
 	{
+		if(wall != null){
+			wall.y = FlxMath.lerp(wall.y, wall.y - 30, CoolUtil.boundTo(elapsed * 3, 0, 1));
+			if(wall.y == (((FlxG.height * 8) * -1) - 300)){
+				trace("PEEENISSSSS");
+				wall.y = 100;
+			}	
+		}
+
+		if(duckie != null){
+			floaty += 0.03;
+			duckie.angle -= Math.sin(floaty) * 0.1;
+			logo2.y -= Math.sin(floaty) * 0.05;
+		}
+
+		if(checkerboard2 != null){
+			checkerboard2.x -= (elapsed / 1.5) / (1 / 60);
+			checkerboard2.y -= (elapsed / 1.5) / (1 / 60);
+		}
+
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
