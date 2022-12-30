@@ -101,6 +101,8 @@ typedef AssetPreload = {
 
 class PlayState extends MusicBeatState
 {
+	var noteRows:Array<Array<Array<Note>>> = [[],[]];
+	
 	public var whosTurn:String = '';
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
@@ -171,6 +173,11 @@ class PlayState extends MusicBeatState
 	public var spawnTime:Float = 3000;
 
 	public var vocals:FlxSound;
+
+	public var dadGhostTween:FlxTween = null;
+	public var bfGhostTween:FlxTween = null;
+	public var dadGhost:FlxSprite = null;
+	public var bfGhost:FlxSprite = null;
 
 	public var dad:Character = null;
 	public var gf:Character = null;
@@ -896,11 +903,19 @@ class PlayState extends MusicBeatState
 		if (curStage == 'limo')
 			add(limo);
 
+
+		dadGhost = new FlxSprite();
+		bfGhost = new FlxSprite();
+
 		switch (curStage)
 		{
 			default:
 				add(gfGroup);
+
+				add(dadGhost);
 				add(dadGroup);
+
+				add(bfGhost);
 				add(boyfriendGroup);
 		}
 
@@ -1047,6 +1062,18 @@ class PlayState extends MusicBeatState
 		boyfriend = new Boyfriend(0, 0, SONG.player1);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
+
+		dadGhost.visible = false;
+		dadGhost.antialiasing = true;
+		dadGhost.alpha = 0.6;
+		dadGhost.scale.copyFrom(dad.scale);
+		dadGhost.updateHitbox();
+		bfGhost.visible = false;
+		bfGhost.antialiasing = true;
+		bfGhost.alpha = 0.6;
+		bfGhost.scale.copyFrom(boyfriend.scale);
+		bfGhost.updateHitbox();
+
 		startCharacterLua(boyfriend.curCharacter);
 		boyfriendMap.set(boyfriend.curCharacter, boyfriend);
 
@@ -2753,6 +2780,10 @@ class PlayState extends MusicBeatState
 
 
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				swagNote.row = Conductor.secsToRow(daStrumTime);
+				if(noteRows[gottaHitNote?0:1][swagNote.row]==null)
+					noteRows[gottaHitNote?0:1][swagNote.row]=[];
+				noteRows[gottaHitNote ? 0 : 1][swagNote.row].push(swagNote);
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				if(gottaHitNote){
@@ -5191,8 +5222,27 @@ class PlayState extends MusicBeatState
 
 			if(char != null)
 			{
-				char.playAnim(animToPlay, true);
 				char.holdTimer = 0;
+
+				// TODO: maybe move this all away into a seperate function
+				if (!note.isSustainNote
+					&& noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row] != null
+					&& noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row].length > 1)
+				{
+					// potentially have jump anims?
+					var chord = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];
+					var animNote = chord[0];
+					var realAnim = singAnimations[Std.int(Math.abs(animNote.noteData))] + altAnim;
+					if (char.mostRecentRow != note.row)
+						char.playAnim(realAnim, true);
+
+					if (note != animNote)
+						doGhostAnim('dad', animToPlay);
+
+					char.mostRecentRow = note.row;
+				}
+				else
+					char.playAnim(animToPlay, true);
 			}
 		}
 
@@ -5330,8 +5380,25 @@ class PlayState extends MusicBeatState
 
 				else if (field.owner.animTimer <= 0 && !field.owner.voicelining)
 				{
-					field.owner.playAnim(animToPlay + daAlt, true);
+					// field.owner.playAnim(animToPlay + daAlt, true);
 					field.owner.holdTimer = 0;
+					if (!note.isSustainNote && noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row]!=null && noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row].length > 1)
+						{
+							// potentially have jump anims?
+							var chord = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];
+							var animNote = chord[0];
+							var realAnim = singAnimations[Std.int(Math.abs(animNote.noteData))] + daAlt;
+							if (field.owner.mostRecentRow != note.row)
+								field.owner.playAnim(realAnim, true);
+							
+		
+							if (note != animNote)
+								doGhostAnim('bf', animToPlay);
+		
+							field.owner.mostRecentRow = note.row;
+						}
+						else
+							field.owner.playAnim(animToPlay, true);
 				}
 
 				if(note.noteType == 'Hey!') {
@@ -5379,6 +5446,59 @@ class PlayState extends MusicBeatState
 			}
 		}
 	}
+
+	function doGhostAnim(char:String, animToPlay:String)
+		{
+			var ghost:FlxSprite = dadGhost;
+			var player:Character = dad;
+	
+			switch(char.toLowerCase().trim()){
+				case 'bf' | 'boyfriend' | '0':
+					ghost = bfGhost;
+					player = boyfriend;
+				case 'dad' | 'opponent' | '1':
+					ghost = dadGhost;
+					player = dad;
+			}
+	
+	
+			ghost.frames = player.frames;
+			ghost.animation.copyFrom(player.animation);
+			ghost.x = player.x;
+			ghost.y = player.y;
+			ghost.animation.play(animToPlay, true);
+			ghost.offset.set(player.animOffsets.get(animToPlay)[0], player.animOffsets.get(animToPlay)[1]);
+			ghost.flipX = player.flipX;
+			ghost.flipY = player.flipY;
+			ghost.alpha = 0.6;
+			ghost.visible = true;
+			ghost.shader = player.shader;
+	
+			switch (char.toLowerCase().trim())
+			{
+				case 'bf' | 'boyfriend' | '0':
+											if (bfGhostTween != null)
+						bfGhostTween.cancel();
+					bfGhostTween = FlxTween.tween(bfGhost, {alpha: 0}, 0.75, {
+						ease: FlxEase.linear,
+						onComplete: function(twn:FlxTween)
+						{
+							bfGhostTween = null;
+						}
+					});
+	
+				case 'dad' | 'opponent' | '1':
+					if (dadGhostTween != null)
+						dadGhostTween.cancel();
+					dadGhostTween = FlxTween.tween(dadGhost, {alpha: 0}, 0.75, {
+						ease: FlxEase.linear,
+						onComplete: function(twn:FlxTween)
+						{
+							dadGhostTween = null;
+						}
+					});
+			}
+		}
 
 	function spawnNoteSplashOnNote(note:Note) {
 		if(ClientPrefs.noteSplashes && note != null) {
@@ -6018,7 +6138,6 @@ class PlayState extends MusicBeatState
 		return null;
 	}
 	#end
-
 
 	override public function switchTo(nextState: Dynamic){
 		if(isPixelStage != stageData.isPixelStage)

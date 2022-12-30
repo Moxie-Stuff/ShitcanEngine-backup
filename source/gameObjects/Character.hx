@@ -51,6 +51,7 @@ typedef AnimArray = {
 
 class Character extends FlxSprite
 {
+    public var mostRecentRow:Int = 0; // for ghost anims n shit
 	public var voicelining:Bool = false; // for fleetway, mainly
 	// but whenever you need to play an anim that has to be manually interrupted, here you go
 
