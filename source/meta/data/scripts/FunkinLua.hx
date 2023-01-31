@@ -425,7 +425,7 @@ class FunkinLua extends FunkinScript
 							}else if(Lua.isstring(luaInstance.lua,-2)){
 								Lua.pushstring(lua, Lua.tostring(luaInstance.lua, -2));
 								pop++;
-							}else if(Lua.isboolean(luaInstance.lua,-2)#if (linc_luajit < "0.0.6")==1#end){
+							}else if(Lua.isboolean(luaInstance.lua,-2)==true){
 								Lua.pushboolean(lua, Lua.toboolean(luaInstance.lua, -2));
 								pop++;
 							}
@@ -439,7 +439,7 @@ class FunkinLua extends FunkinScript
 							}else if(Lua.isstring(luaInstance.lua,-1)){
 								Lua.pushstring(lua, Lua.tostring(luaInstance.lua, -1));
 								pop++;
-							}else if(Lua.isboolean(luaInstance.lua,-1)#if (linc_luajit < "0.0.6")==1#end){
+							}else if(Lua.isboolean(luaInstance.lua,-1)==true){
 								Lua.pushboolean(lua, Lua.toboolean(luaInstance.lua, -1));
 								pop++;
 							}
@@ -2482,7 +2482,7 @@ class FunkinLua extends FunkinScript
 			#if (linc_luajit >= "0.0.6")
 			if(Lua.isfunction(lua, -1)==true){
 			#else
-			if(Lua.isfunction(lua, -1)==1){
+			if(Lua.isfunction(lua, -1)==true){
 			#end
 				for(arg in args) Convert.toLua(lua, arg);
 				var result: Dynamic = Lua.pcall(lua, args.length, 1, 0);
